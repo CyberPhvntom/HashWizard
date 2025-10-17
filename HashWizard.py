@@ -99,7 +99,7 @@ def setup_parser():
 # Comprehensive hash patterns database - Updated for 2025
 HASH_PATTERNS = [
     
-# Argon2 (more flexible)
+# Argon2
 {
     'regex': re.compile(r'^\$argon2(id?|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+$'),
     'types': [
@@ -107,7 +107,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Django Argon2 (more flexible)
+# Django Argon2
 {
     'regex': re.compile(r'^argon2\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+$'),
     'types': [
@@ -115,7 +115,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# LUKS2 (more permissive for different formats)
+# LUKS2
 {
     'regex': re.compile(r'^\$luks\$2\$\d+\$[a-fA-F0-9]+\$.+'),
     'types': [
@@ -123,7 +123,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# MetaMask Wallet (added minimum length check)
+# MetaMask Wallet
 {
     'regex': re.compile(r'^\$metamask\$[a-fA-F0-9]{64,}'),
     'types': [
@@ -131,7 +131,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# OpenSSH Private Keys (more flexible)
+# OpenSSH Private Keys
 {
     'regex': re.compile(r'^\$openssh\$\d+\$\d+\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
     'types': [
@@ -139,7 +139,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Bitwarden (improved pattern)
+# Bitwarden
 {
     'regex': re.compile(r'^\$bitwarden\$\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+$'),
     'types': [
@@ -147,7 +147,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# KeePass KDBX4 (more flexible wildcard)
+# KeePass KDBX4
 {
     'regex': re.compile(r'^\$keepass\$\*4\*\d+\*.+'),
     'types': [
@@ -163,7 +163,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Apple Keychain (improved)
+# Apple Keychain
 {
     'regex': re.compile(r'^\$keychain\$\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
     'types': [
@@ -195,7 +195,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# GPG/PGP Private Key (more flexible)
+# GPG/PGP Private Key
 {
     'regex': re.compile(r'^\$gpg\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
     'types': [
@@ -203,7 +203,7 @@ HASH_PATTERNS = [
     ]
 },
     
-    # BitLocker (added end anchor)
+    # BitLocker
 {
     'regex': re.compile(r'^\$bitlocker\$\d+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+$'),
     'types': [
@@ -211,7 +211,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Azure Active Directory (added end anchor)
+# Azure Active Directory
 {
     'regex': re.compile(r'^\$AzureAD\$\d+\$\d+\$[a-zA-Z0-9+/=]+\$[a-zA-Z0-9+/=]+$'),
     'types': [
@@ -219,7 +219,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Bitcoin/Litecoin Wallet (added end anchor)
+# Bitcoin/Litecoin Wallet
 {
     'regex': re.compile(r'^\$bitcoin\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+$'),
     'types': [
@@ -227,7 +227,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Ethereum Wallet (added end anchor)
+# Ethereum Wallet
 {
     'regex': re.compile(r'^\$ethereum\$[pw]\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+$'),
     'types': [
@@ -235,7 +235,7 @@ HASH_PATTERNS = [
     ]
 },
 
-# Monero Wallet (added end anchor)
+# Monero Wallet
 {
     'regex': re.compile(r'^\$monero\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
     'types': [
@@ -243,146 +243,147 @@ HASH_PATTERNS = [
     ]
 },
     
-    # NTLM with Domain Cached Credentials
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9._-]+:[0-9]+:[a-fA-F0-9]{32}:[a-fA-F0-9]{32}:::$'),
-        'types': [
-            {'name': 'NTDS (Domain Cached Credentials)', 'hashcat': '1100', 'john': 'mscash', 'priority': 95},
-        ]
-    },
-    
-    # NetNTLMv1
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9._-]+::[a-zA-Z0-9._-]+:[a-fA-F0-9]{16}:[a-fA-F0-9]{48}:[a-fA-F0-9]{16}$'),
-        'types': [
-            {'name': 'NetNTLMv1', 'hashcat': '5500', 'john': 'netntlm', 'priority': 100},
-        ]
-    },
-    
-    # NetNTLMv2
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9._-]+::[a-zA-Z0-9._-]+:[a-fA-F0-9]{16}:[a-fA-F0-9]{32}:[a-fA-F0-9]+$'),
-        'types': [
-            {'name': 'NetNTLMv2', 'hashcat': '5600', 'john': 'netntlmv2', 'priority': 100},
-        ]
-    },
-    
-    # Domain Cached Credentials 2 (mscash2)
-    {
-        'regex': re.compile(r'^\$DCC2\$\d+#[^#]+#[a-fA-F0-9]{32}$'),
-        'types': [
-            {'name': 'Domain Cached Credentials 2 (mscash2)', 'hashcat': '2100', 'john': 'mscash2', 'priority': 100},
-        ]
-    },
-    
-    # Kerberos 5 TGS-REP (etype 23)
-    {
-        'regex': re.compile(r'^\$krb5tgs\$23\$\*[^\*]+\*\$[a-fA-F0-9]+$'),
-        'types': [
-            {'name': 'Kerberos 5 TGS-REP etype 23', 'hashcat': '13100', 'john': 'krb5tgs', 'priority': 100},
-        ]
-    },
-    
-    # Kerberos 5 AS-REP (etype 23)
-    {
-        'regex': re.compile(r'^\$krb5asrep\$23\$[^\$]+\$[a-fA-F0-9]+$'),
-        'types': [
-            {'name': 'Kerberos 5 AS-REP etype 23', 'hashcat': '18200', 'john': 'krb5asrep', 'priority': 100},
-        ]
-    },
-    
-    # MD5 (32 hex)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{32}$'),
-        'types': [
-            {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 90},
-            {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 85},
-            {'name': 'MD4', 'hashcat': '900', 'john': 'raw-md4', 'priority': 70},
-            {'name': 'LM', 'hashcat': '3000', 'john': 'lm', 'priority': 60},
-            {'name': 'Double MD5', 'hashcat': '2600', 'john': None, 'priority': 50},
-        ]
-    },
-    
-    # MD5 with salt
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{32}:[a-zA-Z0-9+/=]+$'),
-        'types': [
-            {'name': 'md5($pass.$salt)', 'hashcat': '10', 'john': 'dynamic', 'priority': 90},
-            {'name': 'md5($salt.$pass)', 'hashcat': '20', 'john': 'dynamic', 'priority': 85},
-            {'name': 'Joomla < 3.2', 'hashcat': '11', 'john': 'joomla', 'priority': 80},
-            {'name': 'osCommerce', 'hashcat': '21', 'john': None, 'priority': 75},
-        ]
-    },
-    
-    # SHA1 (40 hex)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{40}$'),
-        'types': [
-            {'name': 'SHA1', 'hashcat': '100', 'john': 'raw-sha1', 'priority': 95},
-            {'name': 'sha1(LinkedIn)', 'hashcat': '190', 'john': 'raw-sha1-linkedin', 'priority': 85},
-            {'name': 'RipeMD160', 'hashcat': '6000', 'john': 'ripemd-160', 'priority': 60},
-            {'name': 'Tiger-160', 'hashcat': None, 'john': None, 'priority': 40},
-        ]
-    },
-    
-    # SHA1 with salt
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-zA-Z0-9+/=]+$'),
-        'types': [
-            {'name': 'sha1($pass.$salt)', 'hashcat': '110', 'john': 'dynamic', 'priority': 90},
-            {'name': 'sha1($salt.$pass)', 'hashcat': '120', 'john': 'dynamic', 'priority': 85},
-            {'name': 'HMAC-SHA1 (key=$pass)', 'hashcat': '150', 'john': 'hmac-sha1', 'priority': 75},
-        ]
-    },
-    
-    # SHA256 (64 hex)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{64}$'),
-        'types': [
-            {'name': 'SHA256', 'hashcat': '1400', 'john': 'raw-sha256', 'priority': 95},
-            {'name': 'SHA3-256 (Keccak)', 'hashcat': '5000', 'john': None, 'priority': 80},
-            {'name': 'GOST R 34.11-94', 'hashcat': '6900', 'john': 'gost', 'priority': 50},
-        ]
-    },
-    
-    # SHA256 with salt
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{64}:[a-zA-Z0-9+/=]+$'),
-        'types': [
-            {'name': 'sha256($pass.$salt)', 'hashcat': '1410', 'john': 'dynamic', 'priority': 90},
-            {'name': 'sha256($salt.$pass)', 'hashcat': '1420', 'john': 'dynamic', 'priority': 85},
-            {'name': 'HMAC-SHA256 (key=$pass)', 'hashcat': '1450', 'john': 'hmac-sha256', 'priority': 75},
-        ]
-    },
-    
-    # SHA384 (96 hex)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{96}$'),
-        'types': [
-            {'name': 'SHA384', 'hashcat': '10800', 'john': 'raw-sha384', 'priority': 95},
-            {'name': 'SHA3-384 (Keccak)', 'hashcat': '17900', 'john': None, 'priority': 80},
-        ]
-    },
-    
-    # SHA512 (128 hex)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{128}$'),
-        'types': [
-            {'name': 'SHA512', 'hashcat': '1700', 'john': 'raw-sha512', 'priority': 95},
-            {'name': 'Whirlpool', 'hashcat': '6100', 'john': 'whirlpool', 'priority': 70},
-            {'name': 'SHA3-512 (Keccak)', 'hashcat': '17600', 'john': None, 'priority': 80},
-        ]
-    },
-    
-    # SHA512 with salt
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{128}:[a-zA-Z0-9+/=]+$'),
-        'types': [
-            {'name': 'sha512($pass.$salt)', 'hashcat': '1710', 'john': 'dynamic', 'priority': 90},
-            {'name': 'sha512($salt.$pass)', 'hashcat': '1720', 'john': 'dynamic', 'priority': 85},
-            {'name': 'HMAC-SHA512 (key=$pass)', 'hashcat': '1750', 'john': 'hmac-sha512', 'priority': 75},
-        ]
-    },
+    # NTDS Dump Format
+{
+    'regex': re.compile(r'^[a-zA-Z0-9._-]+:[0-9]+:[a-fA-F0-9]{32}:[a-fA-F0-9]{32}:::$'),
+    'types': [
+        {'name': 'NTDS Dump (NTLM hash)', 'hashcat': '1000', 'john': 'nt', 'priority': 100},
+    ]
+},
+
+# NetNTLMv1
+{
+    'regex': re.compile(r'^[a-zA-Z0-9._-]+::[a-zA-Z0-9._-]+:[a-fA-F0-9]{16}:[a-fA-F0-9]{48}:[a-fA-F0-9]{16}$'),
+    'types': [
+        {'name': 'NetNTLMv1', 'hashcat': '5500', 'john': 'netntlm', 'priority': 100},
+    ]
+},
+
+# NetNTLMv2
+{
+    'regex': re.compile(r'^[a-zA-Z0-9._-]+::[a-zA-Z0-9._-]+:[a-fA-F0-9]{16}:[a-fA-F0-9]{32}:[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'NetNTLMv2', 'hashcat': '5600', 'john': 'netntlmv2', 'priority': 100},
+    ]
+},
+
+# Domain Cached Credentials 2
+{
+    'regex': re.compile(r'^\$DCC2\$\d+#[^#]+#[a-fA-F0-9]{32}$'),
+    'types': [
+        {'name': 'Domain Cached Credentials 2 (mscash2)', 'hashcat': '2100', 'john': 'mscash2', 'priority': 100},
+    ]
+},
+
+# Kerberos 5 TGS-REP
+{
+    'regex': re.compile(r'^\$krb5tgs\$23\$\*[^\*]+\*\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Kerberos 5 TGS-REP etype 23', 'hashcat': '13100', 'john': 'krb5tgs', 'priority': 100},
+    ]
+},
+
+# Kerberos 5 AS-REP
+{
+    'regex': re.compile(r'^\$krb5asrep\$23\$[^\$]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Kerberos 5 AS-REP etype 23', 'hashcat': '18200', 'john': 'krb5asrep', 'priority': 100},
+    ]
+},
+
+# MD5/NTLM/MD4 (32 hex) 
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{32}$'),
+    'types': [
+        {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 90},  # HIGHER
+        {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 89},  # LOWER
+        {'name': 'MD4', 'hashcat': '900', 'john': 'raw-md4', 'priority': 70},
+        {'name': 'LM', 'hashcat': '3000', 'john': 'lm', 'priority': 60},
+        {'name': 'Double MD5', 'hashcat': '2600', 'john': None, 'priority': 50},
+    ]
+},
+
+# MD5 with salt
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{32}:[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': 'md5($pass.$salt)', 'hashcat': '10', 'john': 'dynamic', 'priority': 90},
+        {'name': 'md5($salt.$pass)', 'hashcat': '20', 'john': 'dynamic', 'priority': 85},
+        {'name': 'Joomla < 3.2', 'hashcat': '11', 'john': 'joomla', 'priority': 80},
+        {'name': 'osCommerce', 'hashcat': '21', 'john': None, 'priority': 75},
+    ]
+},
+
+# SHA1 (40 hex)
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{40}$'),
+    'types': [
+        {'name': 'SHA1', 'hashcat': '100', 'john': 'raw-sha1', 'priority': 95},
+        {'name': 'sha1(LinkedIn)', 'hashcat': '190', 'john': 'raw-sha1-linkedin', 'priority': 85},
+        {'name': 'RipeMD160', 'hashcat': '6000', 'john': 'ripemd-160', 'priority': 60},
+        {'name': 'Tiger-160', 'hashcat': None, 'john': None, 'priority': 40},
+    ]
+},
+
+# SHA1 with salt
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': 'sha1($pass.$salt)', 'hashcat': '110', 'john': 'dynamic', 'priority': 90},
+        {'name': 'sha1($salt.$pass)', 'hashcat': '120', 'john': 'dynamic', 'priority': 85},
+        {'name': 'HMAC-SHA1 (key=$pass)', 'hashcat': '150', 'john': 'hmac-sha1', 'priority': 75},
+    ]
+},
+
+# SHA256 (64 hex)
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{64}$'),
+    'types': [
+        {'name': 'SHA256', 'hashcat': '1400', 'john': 'raw-sha256', 'priority': 95},
+        {'name': 'SHA3-256 (Keccak)', 'hashcat': '5000', 'john': None, 'priority': 80},
+        {'name': 'GOST R 34.11-94', 'hashcat': '6900', 'john': 'gost', 'priority': 50},
+    ]
+},
+
+# SHA256 with salt
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{64}:[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': 'sha256($pass.$salt)', 'hashcat': '1410', 'john': 'dynamic', 'priority': 90},
+        {'name': 'sha256($salt.$pass)', 'hashcat': '1420', 'john': 'dynamic', 'priority': 85},
+        {'name': 'HMAC-SHA256 (key=$pass)', 'hashcat': '1450', 'john': 'hmac-sha256', 'priority': 75},
+    ]
+},
+
+# SHA384 (96 hex)
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{96}$'),
+    'types': [
+        {'name': 'SHA384', 'hashcat': '10800', 'john': 'raw-sha384', 'priority': 95},
+        {'name': 'SHA3-384 (Keccak)', 'hashcat': '17900', 'john': None, 'priority': 80},
+    ]
+},
+
+# SHA512 (128 hex)
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{128}$'),
+    'types': [
+        {'name': 'SHA512', 'hashcat': '1700', 'john': 'raw-sha512', 'priority': 95},
+        {'name': 'Whirlpool', 'hashcat': '6100', 'john': 'whirlpool', 'priority': 70},
+        {'name': 'SHA3-512 (Keccak)', 'hashcat': '17600', 'john': None, 'priority': 80},
+    ]
+},
+
+# SHA512 with salt
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{128}:[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': 'sha512($pass.$salt)', 'hashcat': '1710', 'john': 'dynamic', 'priority': 90},
+        {'name': 'sha512($salt.$pass)', 'hashcat': '1720', 'john': 'dynamic', 'priority': 85},
+        {'name': 'HMAC-SHA512 (key=$pass)', 'hashcat': '1750', 'john': 'hmac-sha512', 'priority': 75},
+    ]
+},
+
     
     # bcrypt - Modern standard
     {
@@ -1189,6 +1190,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
