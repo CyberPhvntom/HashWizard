@@ -203,45 +203,45 @@ HASH_PATTERNS = [
     ]
 },
     
-    # BitLocker
-    {
-        'regex': re.compile(r'^\$bitlocker\$\d+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'BitLocker', 'hashcat': '22100', 'john': 'bitlocker', 'priority': 100},
-        ]
-    },
-    
-    # Azure Active Directory
-    {
-        'regex': re.compile(r'^\$AzureAD\$\d+\$\d+\$[a-zA-Z0-9+/=]+\$[a-zA-Z0-9+/=]+'),
-        'types': [
-            {'name': 'Azure Active Directory', 'hashcat': '33200', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # Bitcoin/Litecoin Wallet
-    {
-        'regex': re.compile(r'^\$bitcoin\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Bitcoin/Litecoin Wallet', 'hashcat': '11300', 'john': 'bitcoin', 'priority': 95},
-        ]
-    },
-    
-    # Ethereum Wallet
-    {
-        'regex': re.compile(r'^\$ethereum\$[pw]\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Ethereum Wallet', 'hashcat': '15700', 'john': 'ethereum', 'priority': 95},
-        ]
-    },
-    
-    # Monero Wallet
-    {
-        'regex': re.compile(r'^\$monero\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Monero Wallet', 'hashcat': '31300', 'john': None, 'priority': 95},
-        ]
-    },
+    # BitLocker (added end anchor)
+{
+    'regex': re.compile(r'^\$bitlocker\$\d+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'BitLocker', 'hashcat': '22100', 'john': 'bitlocker', 'priority': 100},
+    ]
+},
+
+# Azure Active Directory (added end anchor)
+{
+    'regex': re.compile(r'^\$AzureAD\$\d+\$\d+\$[a-zA-Z0-9+/=]+\$[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': 'Azure Active Directory', 'hashcat': '33200', 'john': None, 'priority': 100},
+    ]
+},
+
+# Bitcoin/Litecoin Wallet (added end anchor)
+{
+    'regex': re.compile(r'^\$bitcoin\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$\d+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Bitcoin/Litecoin Wallet', 'hashcat': '11300', 'john': 'bitcoin', 'priority': 95},
+    ]
+},
+
+# Ethereum Wallet (added end anchor)
+{
+    'regex': re.compile(r'^\$ethereum\$[pw]\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Ethereum Wallet', 'hashcat': '15700', 'john': 'ethereum', 'priority': 95},
+    ]
+},
+
+# Monero Wallet (added end anchor)
+{
+    'regex': re.compile(r'^\$monero\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Monero Wallet', 'hashcat': '31300', 'john': None, 'priority': 95},
+    ]
+},
     
     # NTLM with Domain Cached Credentials
     {
@@ -1189,6 +1189,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
