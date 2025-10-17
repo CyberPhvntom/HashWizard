@@ -295,8 +295,8 @@ HASH_PATTERNS = [
 {
     'regex': re.compile(r'^[a-fA-F0-9]{32}$'),
     'types': [
-        {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 90},  # HIGHER
-        {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 89},  # LOWER
+        {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 89},  # Lower
+        {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 90},  # Higher
         {'name': 'MD4', 'hashcat': '900', 'john': 'raw-md4', 'priority': 70},
         {'name': 'LM', 'hashcat': '3000', 'john': 'lm', 'priority': 60},
         {'name': 'Double MD5', 'hashcat': '2600', 'john': None, 'priority': 50},
@@ -1184,6 +1184,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
