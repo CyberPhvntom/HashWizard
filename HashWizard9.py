@@ -107,7 +107,7 @@ HASH_PATTERNS = [
         ]
     },
     
-    # Django Argon2
+    # Django-Argon2
     {
         'regex': re.compile(r'^argon2\$argon2id\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+\$[A-Za-z0-9+/]+$'),
         'types': [
@@ -1189,3 +1189,4 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
