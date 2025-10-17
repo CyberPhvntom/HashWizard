@@ -1,5 +1,5 @@
 Description: HashWizard - Advanced Hash Identification Tool
-
+---------------------------------------------------------------
 Basic Usage Syntax:
 
 python HashWizard.py {-sh hash | -f file | -d directory} [options] 
@@ -9,14 +9,7 @@ python HashWizard.py {-sh hash | -f file | -d directory} [options]
 -f, --file > parse a single file for hashes
 
 -d, --directory > parse a directory and subdirectories
-
 -------------------------------------------------------------
-
-
-
-
-
-
 -o, --output > specify output filename
 
 -hc, --hashcatOutput > output hashcat mode for hash type
