@@ -295,8 +295,8 @@ HASH_PATTERNS = [
 {
     'regex': re.compile(r'^[a-fA-F0-9]{32}$'),
     'types': [
-        {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 90},  # HIGHER
-        {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 89},  # LOWER
+        {'name': 'NTLM', 'hashcat': '1000', 'john': 'nt', 'priority': 90}, 
+        {'name': 'MD5', 'hashcat': '0', 'john': 'raw-md5', 'priority': 90},  
         {'name': 'MD4', 'hashcat': '900', 'john': 'raw-md4', 'priority': 70},
         {'name': 'LM', 'hashcat': '3000', 'john': 'lm', 'priority': 60},
         {'name': 'Double MD5', 'hashcat': '2600', 'john': None, 'priority': 50},
@@ -883,21 +883,43 @@ def format_hash_output(hash_string, matches, show_john=False, verbose=False, sho
     
     output.append(f"\n{Colors.BOLD}{Colors.GREEN}Possible Hash Types:{Colors.END}")
     
-    # Most likely match
+    # Check for ambiguity
     most_likely = matches[0]
-    output.append(f"\n  {Colors.BOLD}Most Likely:{Colors.END}")
-    output.append(f"  {Colors.GREEN}[★]{Colors.END} {most_likely['name']}")
-    if show_hashcat and most_likely['hashcat']:
-        output.append(f"      Hashcat Mode: {Colors.YELLOW}{most_likely['hashcat']}{Colors.END}")
-    if show_john and most_likely['john']:
-        output.append(f"      John Format: {Colors.YELLOW}{most_likely['john']}{Colors.END}")
-    if verbose:
-        output.append(f"      Confidence: {Colors.CYAN}{most_likely['priority']}%{Colors.END}")
+    same_priority_matches = [m for m in matches if m['priority'] == most_likely['priority']]
     
-    # Other possible matches
-    if len(matches) > 1 and verbose:
+    if len(same_priority_matches) > 1:
+        
+        # Ambiguous case - show all equally likely options!
+        output.append(f"\n  {Colors.YELLOW}[!] Ambiguous - Multiple equally likely matches:{Colors.END}")
+        for match in same_priority_matches:
+            output.append(f"  {Colors.GREEN}[★]{Colors.END} {match['name']}")
+            if show_hashcat and match['hashcat']:
+                output.append(f"      Hashcat Mode: {Colors.YELLOW}{match['hashcat']}{Colors.END}")
+            if show_john and match['john']:
+                output.append(f"      John Format: {Colors.YELLOW}{match['john']}{Colors.END}")
+        
+        # Add helpful context message for 32-hex hashes
+        if len(hash_string) == 32 and all(c in '0123456789abcdefABCDEF' for c in hash_string):
+            output.append(f"\n  {Colors.CYAN}[i] Context Clues:{Colors.END}")
+            output.append(f"      • Found in Windows/AD dump? → Likely NTLM")
+            output.append(f"      • Found in web app database? → Likely MD5")
+            output.append(f"      • Try both modes when cracking")
+    else:
+        # Clear winner - show most likely
+        output.append(f"\n  {Colors.BOLD}Most Likely:{Colors.END}")
+        output.append(f"  {Colors.GREEN}[★]{Colors.END} {most_likely['name']}")
+        if show_hashcat and most_likely['hashcat']:
+            output.append(f"      Hashcat Mode: {Colors.YELLOW}{most_likely['hashcat']}{Colors.END}")
+        if show_john and most_likely['john']:
+            output.append(f"      John Format: {Colors.YELLOW}{most_likely['john']}{Colors.END}")
+        if verbose:
+            output.append(f"      Confidence: {Colors.CYAN}{most_likely['priority']}%{Colors.END}")
+    
+    # Other possible matches (lower priority)
+    lower_priority = [m for m in matches if m['priority'] < most_likely['priority']]
+    if lower_priority and verbose:
         output.append(f"\n  {Colors.BOLD}Other Possibilities:{Colors.END}")
-        for match in matches[1:4]:  # Show top 3 alternatives
+        for match in lower_priority[:3]:  # Show top 3 alternatives
             output.append(f"  {Colors.YELLOW}[•]{Colors.END} {match['name']}")
             if show_hashcat and match['hashcat']:
                 output.append(f"      Hashcat Mode: {match['hashcat']}")
@@ -1187,6 +1209,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
