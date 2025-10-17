@@ -9,6 +9,8 @@ python HashWizard.py {-sh hash | -f file | -d directory} [options]
 -f, --file > parse a single file for hashes
 
 -d, --directory > parse a directory and subdirectories
+
+
 -------------------------------------------------------------
 -o, --output > specify output filename
 
