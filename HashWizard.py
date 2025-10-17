@@ -529,14 +529,16 @@ HASH_PATTERNS = [
         ]
     },
     
-    # MySQL 3.x (old)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{16}$'),
-        'types': [
-            {'name': 'MySQL 3.x', 'hashcat': '200', 'john': 'mysql', 'priority': 80},
-            {'name': 'Oracle 7-10g (DES)', 'hashcat': '3100', 'john': 'oracle', 'priority': 75},
-        ]
-    },
+# MySQL 3.x / Oracle 7-10g / CRC64
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{16}$'),
+    'types': [
+        {'name': 'MySQL 3.x', 'hashcat': '200', 'john': 'mysql', 'priority': 80},
+        {'name': 'Oracle 7-10g (DES)', 'hashcat': '3100', 'john': 'oracle', 'priority': 75},
+        {'name': 'CRC64', 'hashcat': None, 'john': None, 'priority': 25},
+    ]
+},
+
     
     # MSSQL 2000
     {
@@ -578,12 +580,12 @@ HASH_PATTERNS = [
         ]
     },
     
-    # PostgreSQL MD5
+    # PostgreSQL MD5 (FIXED - made more specific)
     {
-        'regex': re.compile(r'^md5[a-fA-F0-9]{32}$'),
-        'types': [
-            {'name': 'PostgreSQL MD5', 'hashcat': '11', 'john': 'postgres', 'priority': 95},
-        ]
+    'regex': re.compile(r'^md5[a-fA-F0-9]{32}$'),
+    'types': [
+        {'name': 'PostgreSQL MD5', 'hashcat': '11', 'john': 'postgres', 'priority': 100},
+    ]
     },
     
     # PostgreSQL SCRAM-SHA-256
@@ -612,18 +614,18 @@ HASH_PATTERNS = [
     
     # WPA3
     {
-        'regex': re.compile(r'^\$WPA3\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'WPA3', 'hashcat': '22000', 'john': None, 'priority': 100},
-        ]
+    'regex': re.compile(r'^\$WPA3\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'WPA3', 'hashcat': '22000', 'john': None, 'priority': 100},
+    ]
     },
-    
-    # IKE PSK (MD5/SHA1)
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-fA-F0-9]{40}:[a-fA-F0-9]{40}:[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'IKE-PSK MD5/SHA1', 'hashcat': '5300', 'john': None, 'priority': 90},
-        ]
+
+    # IKE PSK
+     {
+    'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-fA-F0-9]{40}:[a-fA-F0-9]{40}:[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'IKE-PSK MD5/SHA1', 'hashcat': '5300', 'john': None, 'priority': 90},
+    ]
     },
     
     # IPMI2 RAKP HMAC-SHA1
@@ -634,37 +636,38 @@ HASH_PATTERNS = [
         ]
     },
     
-    # Cisco IOS SHA256
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9./]{43}$'),
-        'types': [
-            {'name': 'Cisco-IOS SHA256', 'hashcat': '5700', 'john': None, 'priority': 90},
-        ]
-    },
+    # Cisco IOS SHA256 
+{
+    'regex': re.compile(r'^[a-zA-Z0-9./]{43}$'),
+    'types': [
+        {'name': 'Cisco-IOS SHA256', 'hashcat': '5700', 'john': None, 'priority': 70},
+    ]
+},
+
+# Cisco-PIX MD5 
+{
+    'regex': re.compile(r'^[a-zA-Z0-9./]{16}$'),
+    'types': [
+        {'name': 'Cisco-PIX MD5', 'hashcat': '2400', 'john': 'pix-md5', 'priority': 75},
+        {'name': 'CRC64', 'hashcat': None, 'john': None, 'priority': 25},  # DUPLICATE - may conflict
+    ]
+},
+
+# Cisco Type 4 
+{
+    'regex': re.compile(r'^[a-zA-Z0-9./]{32}$'),
+    'types': [
+        {'name': 'Cisco Type 4', 'hashcat': '5700', 'john': None, 'priority': 70},
+    ]
+},
     
-    # Cisco-PIX MD5
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9./]{16}'),
-        'types': [
-            {'name': 'Cisco-PIX MD5', 'hashcat': '2400', 'john': 'pix-md5', 'priority': 85},
-        ]
-    },
-    
-    # Cisco Type 4
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9./]{32}'),
-        'types': [
-            {'name': 'Cisco Type 4', 'hashcat': '5700', 'john': None, 'priority': 80},
-        ]
-    },
-    
-    # Cisco Type 7
-    {
-        'regex': re.compile(r'^[0-9]{2}[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Cisco Type 7 (weak encryption)', 'hashcat': None, 'john': 'cisco7', 'priority': 85},
-        ]
-    },
+    # Cisco Type 7 
+{
+    'regex': re.compile(r'^[0-9]{2}[a-fA-F0-9]{4,}$'),
+    'types': [
+        {'name': 'Cisco Type 7 (weak encryption)', 'hashcat': None, 'john': 'cisco7', 'priority': 75},
+    ]
+},
     
     # LDAP SHA
     {
@@ -698,37 +701,37 @@ HASH_PATTERNS = [
         ]
     },
     
-    # macOS v10.8+
-    {
-        'regex': re.compile(r'^\$ml\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]{128}'),
-        'types': [
-            {'name': 'macOS v10.8+ (PBKDF2-SHA512)', 'hashcat': '7100', 'john': 'xsha512', 'priority': 100},
-        ]
-    },
-    
-    # macOS v10.7
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{136}'),
-        'types': [
-            {'name': 'macOS v10.7', 'hashcat': '1722', 'john': 'xsha512', 'priority': 90},
-        ]
-    },
-    
-    # macOS v10.4-10.6
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{48}'),
-        'types': [
-            {'name': 'macOS v10.4-10.6', 'hashcat': '122', 'john': 'xsha', 'priority': 85},
-        ]
-    },
-    
-    # Android PIN
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-fA-F0-9]{40}'),
-        'types': [
-            {'name': 'Samsung Android Password/PIN', 'hashcat': '5800', 'john': None, 'priority': 90},
-        ]
-    },
+    # macOS v10.8+ 
+{
+    'regex': re.compile(r'^\$ml\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]{128}$'),
+    'types': [
+        {'name': 'macOS v10.8+ (PBKDF2-SHA512)', 'hashcat': '7100', 'john': 'xsha512', 'priority': 100},
+    ]
+},
+
+# macOS v10.7 
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{136}$'),
+    'types': [
+        {'name': 'macOS v10.7', 'hashcat': '1722', 'john': 'xsha512', 'priority': 90},
+    ]
+},
+
+# macOS v10.4-10.6
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{48}$'),
+    'types': [
+        {'name': 'macOS v10.4-10.6', 'hashcat': '122', 'john': 'xsha', 'priority': 85},
+    ]
+},
+
+# Android PIN
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{40}:[a-fA-F0-9]{40}$'),
+    'types': [
+        {'name': 'Samsung Android Password/PIN', 'hashcat': '5800', 'john': None, 'priority': 95},
+    ]
+},
     
     # Android Backup
     {
@@ -739,125 +742,116 @@ HASH_PATTERNS = [
     },
     
     # 7-Zip
-    {
-        'regex': re.compile(r'^\$7z\$\d+\$\d+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': '7-Zip', 'hashcat': '11600', 'john': '7z', 'priority': 100},
-        ]
-    },
-    
-    # RAR3
-    {
-        'regex': re.compile(r'^\$RAR3\$\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'RAR3-hp', 'hashcat': '12500', 'john': 'rar', 'priority': 100},
-        ]
-    },
-    
-    # RAR5
-    {
-        'regex': re.compile(r'^\$rar5\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'RAR5', 'hashcat': '13000', 'john': 'rar5', 'priority': 100},
-        ]
-    },
-    
-    # ZIP (WinZip/PKZIP)
-    {
-        'regex': re.compile(r'^\$zip2\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'ZIP (PKZIP)', 'hashcat': '13600', 'john': 'zip', 'priority': 95},
-        ]
-    },
-    
-    # ZIP (AES)
-    {
-        'regex': re.compile(r'^\$zip3\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'ZIP (AES)', 'hashcat': '13600', 'john': 'zip', 'priority': 100},
-        ]
-    },
-    
-    # PDF 1.4-1.6
-    {
-        'regex': re.compile(r'^\$pdf\$[245]\*[34]\*128\*-?\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'PDF 1.4-1.6', 'hashcat': '10500', 'john': 'pdf', 'priority': 95},
-        ]
-    },
-    
-    # PDF 1.7+
-    {
-        'regex': re.compile(r'^\$pdf\$[5-6]\*[5-6]\*256\*-?\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'PDF 1.7+', 'hashcat': '10700', 'john': 'pdf', 'priority': 100},
-        ]
-    },
-    
-    # Office 2007
-    {
-        'regex': re.compile(r'^\$office\$\*2007\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'MS Office 2007', 'hashcat': '9400', 'john': 'office', 'priority': 95},
-        ]
-    },
-    
-    # Office 2010
-    {
-        'regex': re.compile(r'^\$office\$\*2010\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'MS Office 2010', 'hashcat': '9500', 'john': 'office', 'priority': 95},
-        ]
-    },
-    
-    # Office 2013
-    {
-        'regex': re.compile(r'^\$office\$\*2013\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'MS Office 2013', 'hashcat': '9600', 'john': 'office', 'priority': 100},
-        ]
-    },
-    
-    # 1Password (Agile Keychain)
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9+/=]{64,}:[a-zA-Z0-9+/=]+'),
-        'types': [
-            {'name': '1Password (Agile Keychain)', 'hashcat': '6600', 'john': '1password', 'priority': 85},
-        ]
-    },
-    
-    # LastPass
-    {
-        'regex': re.compile(r'^[a-zA-Z0-9+/=]+:[a-zA-Z0-9+/=]+@[a-zA-Z0-9.-]+'),
-        'types': [
-            {'name': 'LastPass', 'hashcat': '6800', 'john': 'lastpass', 'priority': 90},
-        ]
-    },
-    
-    # BLAKE2b-512
-    {
-        'regex': re.compile(r'^\$BLAKE2\$[a-fA-F0-9]{128}'),
-        'types': [
-            {'name': 'BLAKE2b-512', 'hashcat': '600', 'john': 'raw-blake2', 'priority': 90},
-        ]
-    },
-    
-    # CRC32
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{8}'),
-        'types': [
-            {'name': 'CRC32', 'hashcat': None, 'john': None, 'priority': 30},
-        ]
-    },
-    
-    # CRC64
-    {
-        'regex': re.compile(r'^[a-fA-F0-9]{16}'),
-        'types': [
-            {'name': 'CRC64', 'hashcat': None, 'john': None, 'priority': 25},
-        ]
-    },
-]
+{
+    'regex': re.compile(r'^\$7z\$\d+\$\d+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': '7-Zip', 'hashcat': '11600', 'john': '7z', 'priority': 100},
+    ]
+},
+
+# RAR3 
+{
+    'regex': re.compile(r'^\$RAR3\$\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'RAR3-hp', 'hashcat': '12500', 'john': 'rar', 'priority': 100},
+    ]
+},
+
+# RAR5
+{
+    'regex': re.compile(r'^\$rar5\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+\$\d+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'RAR5', 'hashcat': '13000', 'john': 'rar5', 'priority': 100},
+    ]
+},
+
+# ZIP (WinZip/PKZIP)
+{
+    'regex': re.compile(r'^\$zip2\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'ZIP (PKZIP)', 'hashcat': '13600', 'john': 'zip', 'priority': 95},
+    ]
+},
+
+# ZIP (AES)
+{
+    'regex': re.compile(r'^\$zip3\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'ZIP (AES)', 'hashcat': '13600', 'john': 'zip', 'priority': 100},
+    ]
+},
+
+# PDF 1.4-1.6
+{
+    'regex': re.compile(r'^\$pdf\$[245]\*[34]\*128\*-?\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'PDF 1.4-1.6', 'hashcat': '10500', 'john': 'pdf', 'priority': 95},
+    ]
+},
+
+# PDF 1.7+
+{
+    'regex': re.compile(r'^\$pdf\$[5-6]\*[5-6]\*256\*-?\d+\*\d+\*\d+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'PDF 1.7+', 'hashcat': '10700', 'john': 'pdf', 'priority': 100},
+    ]
+},
+
+# Office 2007
+{
+    'regex': re.compile(r'^\$office\$\*2007\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'MS Office 2007', 'hashcat': '9400', 'john': 'office', 'priority': 95},
+    ]
+},
+
+# Office 2010
+{
+    'regex': re.compile(r'^\$office\$\*2010\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'MS Office 2010', 'hashcat': '9500', 'john': 'office', 'priority': 95},
+    ]
+},
+
+# Office 2013
+{
+    'regex': re.compile(r'^\$office\$\*2013\*\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+\*[a-fA-F0-9]+.*$'),
+    'types': [
+        {'name': 'MS Office 2013', 'hashcat': '9600', 'john': 'office', 'priority': 100},
+    ]
+},
+
+# 1Password
+{
+    'regex': re.compile(r'^[a-zA-Z0-9+/=]{64,}:[a-zA-Z0-9+/=]+$'),
+    'types': [
+        {'name': '1Password (Agile Keychain)', 'hashcat': '6600', 'john': '1password', 'priority': 70},
+    ]
+},
+
+# LastPass
+{
+    'regex': re.compile(r'^[a-zA-Z0-9+/=]+:[a-zA-Z0-9+/=]+@[a-zA-Z0-9.-]+$'),
+    'types': [
+        {'name': 'LastPass', 'hashcat': '6800', 'john': 'lastpass', 'priority': 90},
+    ]
+},
+
+# BLAKE2b-512
+{
+    'regex': re.compile(r'^\$BLAKE2\$[a-fA-F0-9]{128}$'),
+    'types': [
+        {'name': 'BLAKE2b-512', 'hashcat': '600', 'john': 'raw-blake2', 'priority': 90},
+    ]
+},
+
+# CRC32
+{
+    'regex': re.compile(r'^[a-fA-F0-9]{8}$'),
+    'types': [
+        {'name': 'CRC32', 'hashcat': None, 'john': None, 'priority': 30},
+    ]
+},
 
 def identify_hash_advanced(hash_string):
     """Advanced hash identification using regex patterns with probability scoring."""
@@ -1190,6 +1184,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
