@@ -99,7 +99,7 @@ def setup_parser():
 # Comprehensive hash patterns database - Updated for 2025
 HASH_PATTERNS = [
     
-    # Argon2
+# Argon2
     {
         'regex': re.compile(r'^\$argon2(id?|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+\$[A-Za-z0-9+/]+$'),
         'types': [
@@ -1187,4 +1187,5 @@ if __name__ == '__main__':
         print(f'\n{Colors.RED}[!] Error: {e}{Colors.END}')
         import traceback
         traceback.print_exc()
+
         sys.exit(1)
