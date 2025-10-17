@@ -100,108 +100,108 @@ def setup_parser():
 HASH_PATTERNS = [
     
 # Argon2
-    {
-        'regex': re.compile(r'^\$argon2(id?|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+\$[A-Za-z0-9+/]+$'),
-        'types': [
-            {'name': 'Argon2', 'hashcat': '34000', 'john': 'argon2', 'priority': 100},
-        ]
-    },
-    
-    # Django-Argon2
-    {
-        'regex': re.compile(r'^argon2\$argon2id\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+\$[A-Za-z0-9+/]+$'),
-        'types': [
-            {'name': 'Django Argon2', 'hashcat': '34000', 'john': 'django-argon2', 'priority': 100},
-        ]
-    },
-    
-    # LUKS2 
-    {
-        'regex': re.compile(r'^\$luks\$2\$\d+\$[a-fA-F0-9]+\$.*'),
-        'types': [
-            {'name': 'LUKS2', 'hashcat': '29541', 'john': 'luks', 'priority': 100},
-        ]
-    },
-    
-    # MetaMask Wallet
-    {
-        'regex': re.compile(r'^\$metamask\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'MetaMask Wallet', 'hashcat': '26600', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # OpenSSH Private Keys
-    {
-        'regex': re.compile(r'^\$openssh\$\d+\$\d+\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'OpenSSH Private Key', 'hashcat': '22911', 'john': 'SSH', 'priority': 100},
-        ]
-    },
-    
-    # Bitwarden
-    {
-        'regex': re.compile(r'^\$bitwarden\$\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Bitwarden', 'hashcat': '31000', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # KeePass KDBX4 (newer format)
-    {
-        'regex': re.compile(r'^\$keepass\$\*4\*\d+\*.*'),
-        'types': [
-            {'name': 'KeePass KDBX4', 'hashcat': '29443', 'john': 'KeePass', 'priority': 100},
-        ]
-    },
-    
-    # KeePass KDBX3
-    {
-        'regex': re.compile(r'^\$keepass\$\*2\*\d+\*.*'),
-        'types': [
-            {'name': 'KeePass KDBX3', 'hashcat': '13400', 'john': 'KeePass', 'priority': 95},
-        ]
-    },
-    
-    # Apple Keychain
-    {
-        'regex': re.compile(r'^\$keychain\$\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Apple Keychain', 'hashcat': '23100', 'john': 'keychain', 'priority': 95},
-        ]
-    },
-    
-    # Microsoft Online Account
-    {
-        'regex': re.compile(r'^\$MSOnline\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'Microsoft Online Account', 'hashcat': '29411', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # SNMPv3 HMAC-SHA256
-    {
-        'regex': re.compile(r'^\$SNMPv3\$4\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'SNMPv3 HMAC-SHA256', 'hashcat': '29821', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # SNMPv3 HMAC-SHA1
-    {
-        'regex': re.compile(r'^\$SNMPv3\$3\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'SNMPv3 HMAC-SHA1', 'hashcat': '29721', 'john': None, 'priority': 100},
-        ]
-    },
-    
-    # GPG/PGP Private Key
-    {
-        'regex': re.compile(r'^\$gpg\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
-        'types': [
-            {'name': 'GPG/PGP Private Key', 'hashcat': '17010', 'john': 'gpg', 'priority': 100},
-        ]
-    },
+{
+    'regex': re.compile(r'^\$argon2(id?|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+$'),
+    'types': [
+        {'name': 'Argon2', 'hashcat': '34000', 'john': 'argon2', 'priority': 100},
+    ]
+},
+
+# Django Argon2
+{
+    'regex': re.compile(r'^argon2\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+$'),
+    'types': [
+        {'name': 'Django Argon2', 'hashcat': '34000', 'john': 'django-argon2', 'priority': 100},
+    ]
+},
+
+# LUKS2
+{
+    'regex': re.compile(r'^\$luks\$2\$\d+\$[a-fA-F0-9]+\$.+'),
+    'types': [
+        {'name': 'LUKS2', 'hashcat': '29541', 'john': 'luks', 'priority': 100},
+    ]
+},
+
+# MetaMask Wallet
+{
+    'regex': re.compile(r'^\$metamask\$[a-fA-F0-9]{64,}'),
+    'types': [
+        {'name': 'MetaMask Wallet', 'hashcat': '26600', 'john': None, 'priority': 100},
+    ]
+},
+
+# OpenSSH Private Keys
+{
+    'regex': re.compile(r'^\$openssh\$\d+\$\d+\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'OpenSSH Private Key', 'hashcat': '22911', 'john': 'SSH', 'priority': 100},
+    ]
+},
+
+# Bitwarden
+{
+    'regex': re.compile(r'^\$bitwarden\$\d+\*\d+\*\d+\*[a-fA-F0-9]+\*[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Bitwarden', 'hashcat': '31000', 'john': None, 'priority': 100},
+    ]
+},
+
+# KeePass KDBX4
+{
+    'regex': re.compile(r'^\$keepass\$\*4\*\d+\*.+'),
+    'types': [
+        {'name': 'KeePass KDBX4', 'hashcat': '29443', 'john': 'KeePass', 'priority': 100},
+    ]
+},
+
+# KeePass KDBX3
+{
+    'regex': re.compile(r'^\$keepass\$\*2\*\d+\*.+'),
+    'types': [
+        {'name': 'KeePass KDBX3', 'hashcat': '13400', 'john': 'KeePass', 'priority': 95},
+    ]
+},
+
+# Apple Keychain
+{
+    'regex': re.compile(r'^\$keychain\$\*[a-fA-F0-9]+\*[a-fA-F0-9]+'),
+    'types': [
+        {'name': 'Apple Keychain', 'hashcat': '23100', 'john': 'keychain', 'priority': 95},
+    ]
+},
+
+# Microsoft Online Account
+{
+    'regex': re.compile(r'^\$MSOnline\$\d+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'Microsoft Online Account', 'hashcat': '29411', 'john': None, 'priority': 100},
+    ]
+},
+
+# SNMPv3 HMAC-SHA256
+{
+    'regex': re.compile(r'^\$SNMPv3\$4\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'SNMPv3 HMAC-SHA256', 'hashcat': '29821', 'john': None, 'priority': 100},
+    ]
+},
+
+# SNMPv3 HMAC-SHA1
+{
+    'regex': re.compile(r'^\$SNMPv3\$3\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+\$[a-fA-F0-9]+$'),
+    'types': [
+        {'name': 'SNMPv3 HMAC-SHA1', 'hashcat': '29721', 'john': None, 'priority': 100},
+    ]
+},
+
+# GPG/PGP Private Key
+{
+    'regex': re.compile(r'^\$gpg\$\*\d+\*\d+\*\d+\*[a-fA-F0-9]+'),
+    'types': [
+        {'name': 'GPG/PGP Private Key', 'hashcat': '17010', 'john': 'gpg', 'priority': 100},
+    ]
+},
     
     # BitLocker
     {
@@ -1189,5 +1189,6 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
