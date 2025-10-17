@@ -853,6 +853,23 @@ HASH_PATTERNS = [
     ]
 },
 
+#Apply heuristics to better distinguish between MD5 and NTLM
+#Check for all hex or all lowercase / This is more common in NTLM hash dumps
+    def smart_ntlm_detection(hash_string, matches):
+    if len(hash_string) == 32 and hash_string.isalnum():
+        try:
+            int(hash_string, 16)
+            if hash_string.islower():
+                for match in matches:
+                    if match['name'] == 'NTLM':
+                        match['priority'] += 5
+            
+        except ValueError:
+            pass
+    
+    return sorted(matches, key=lambda x: x['priority'], reverse=True)
+
+    
 def identify_hash_advanced(hash_string):
     """Advanced hash identification using regex patterns with probability scoring."""
     hash_string = hash_string.strip()
@@ -862,11 +879,24 @@ def identify_hash_advanced(hash_string):
         if pattern_group['regex'].match(hash_string):
             for hash_type in pattern_group['types']:
                 matches.append(hash_type.copy())
+
+    #Apply CyberPhvntom's smart_ntlm_detection from above
+    if matches:
+        matches = smart_ntlm_detection(hash_string, matches)
     
-    # Sort by priority (higher is more likely)
     matches.sort(key=lambda x: x['priority'], reverse=True)
+
+
+#Remove duplicates / Preserve order
+        seen = set()
+    unique_matches = []
+    for match in matches:
+        identifier = (match['name'], match['hashcat'])
+        if identifier not in seen:
+            seen.add(identifier)
+            unique_matches.append(match)
     
-    return matches
+    return unique_matches
 
 def format_hash_output(hash_string, matches, show_john=False, verbose=False, show_hashcat=False):
     """Format hash identification output with color coding."""
@@ -890,6 +920,14 @@ def format_hash_output(hash_string, matches, show_john=False, verbose=False, sho
         output.append(f"      John Format: {Colors.YELLOW}{most_likely['john']}{Colors.END}")
     if verbose:
         output.append(f"      Confidence: {Colors.CYAN}{most_likely['priority']}%{Colors.END}")
+
+
+# Warn of ambiguity in 32 hex hashes
+if len(hash_string) == 32 and all(c in '0123456789abcdefABCDEF' for c in hash_string):
+        output.append(f"\n  {Colors.YELLOW}[!] Note: 32-character hex hashes are ambiguous.{Colors.END}")
+        output.append(f"      {Colors.YELLOW}This could be MD5, NTLM, MD4, or LM.{Colors.END}")
+        output.append(f"      {Colors.YELLOW}Context matters! Check where you found this hash.{Colors.END}")
+
     
     # Other possible matches
     if len(matches) > 1 and verbose:
@@ -1184,6 +1222,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
