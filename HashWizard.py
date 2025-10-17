@@ -852,7 +852,8 @@ HASH_PATTERNS = [
         {'name': 'CRC32', 'hashcat': None, 'john': None, 'priority': 30},
     ]
 },
-
+    
+]
 def identify_hash_advanced(hash_string):
     """Advanced hash identification using regex patterns with probability scoring."""
     hash_string = hash_string.strip()
@@ -1184,6 +1185,7 @@ if __name__ == '__main__':
         traceback.print_exc()
 
         sys.exit(1)
+
 
 
 
